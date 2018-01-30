@@ -105,29 +105,29 @@ function getPopupContent (item) {
     if(item.atk != undefined){
         var totaliv = 100 * (item.atk + item.def + item.sta) / 45;
         content += ' - <b>' + totaliv.toFixed(2) + '%</b><br>';
-        content += 'Disappears in: ' + expires_at + '<br>';
-        content += 'Move 1: ' + item.move1 + ' ( ' + item.damage1 + ' dps )<br>';
-        content += 'Move 2: ' + item.move2 + ' ( ' + item.damage2 + ' dps )<br>';
+        content += 'Verschwindet in: ' + expires_at + '<br>';
+        content += 'Attacke 1: ' + item.move1 + ' ( ' + item.damage1 + ' dps )<br>';
+        content += 'Attacke 2: ' + item.move2 + ' ( ' + item.damage2 + ' dps )<br>';
         content += 'IV: ' + item.atk + ' atk, ' + item.def + ' def, ' + item.sta + ' sta<br>';
         content += 'CP: ' + item.cp + ' | Lvl: ' + item.level + '<br>';
     } else {
-        content += '<br>Disappears in: ' + expires_at + '<br>';
+        content += '<br>Verschwindet in: ' + expires_at + '<br>';
     }
     content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Hidden" class="popup_filter_link">Hide</a>';
     content += '&nbsp; | &nbsp;';
 
     var userPref = getPreference('filter-'+item.pokemon_id);
     if (userPref == 'trash'){
-        content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Pokemon" class="popup_filter_link">Move to Pokemon</a>';
+        content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Pokemon" class="popup_filter_link">Nach Pokemon</a>';
     }else{
-        content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Trash" class="popup_filter_link">Move to Trash</a>';
+        content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Trash" class="popup_filter_link">Nach Müll</a>';
     }
-    content += '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ item.lat + ','+ item.lon +'" target="_blank" title="See in Google Maps">Get directions</a>';
+    content += '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ item.lat + ','+ item.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
     return content;
 }
 
 function getRaidPopupContent (raw) {
-	var content = '<b>Raid level ' + raw.level + '</b><br>';
+	var content = '<b>Raid Level ' + raw.level + '</b><br>';
 	var info_link = (raw.pokemon_id === 0) ? '' : ' - <a href="https://pokemongo.gamepress.gg/pokemon/' + raw.pokemon_id + '">#' + raw.pokemon_id + '</a>';
 	content += 'Pokemon: ' + raw.pokemon_name + info_link + '<br>';
 	if (raw.pokemon_id === 0){
@@ -136,14 +136,14 @@ function getRaidPopupContent (raw) {
     	var seconds = parseInt(diff - (minutes * 60));
 		content += 'Raid Battle: ' + minutes + 'm ' + seconds + 's<br>';
 	}else{
-    content += 'Move 1: ' + raw.move1 + '<br>';
-    content += 'Move 2: ' + raw.move2 + '<br>';
+    content += 'Attacke 1: ' + raw.move1 + '<br>';
+    content += 'Attacke 2: ' + raw.move2 + '<br>';
 		var diff = (raw.time_end - new Date().getTime() / 1000);
 		var minutes = parseInt(diff / 60);
     	var seconds = parseInt(diff - (minutes * 60));
-		content += 'Raid End: ' + minutes + 'm ' + seconds + 's<br>';
+		content += 'Endet: ' + minutes + 'm ' + seconds + 's<br>';
 	}
-    content += '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ raw.lat + ','+ raw.lon +'" target="_blank" title="See in Google Maps">Get directions</a>';
+    content += '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ raw.lat + ','+ raw.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
     return content;
 }
 
@@ -232,7 +232,7 @@ function FortMarker (raw) {
     marker.on('popupopen',function popupopen (event) {
         var content = ''
         if (raw.team === 0) {
-            content = '<b>An empty Gym!</b>'
+            content = '<b>Eine Leere Arena!</b>'
         }
         else {
             if (raw.team === 1 ) {
