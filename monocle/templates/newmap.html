@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Monocle - {{ area_name }}</title>
+  <title>Pokestalk - {{ area_name }}</title>
   <link rel="stylesheet" href='static/css/leaflet.css'>
   <link rel="stylesheet" href='static/css/bootstrap.min.css'>
   <link rel="stylesheet" href='static/css/main.css'>
@@ -15,7 +15,7 @@
   <meta name="theme-color" content="#772c30">
 </head>
 <body>
-  <h1>Monocle is initializing, please wait.</h1>
+  <h1>Die Karte lädt, bitte warten...</h1>
   <script>
         var _MapCoords = [{{ map_center[0] }}, {{ map_center[1] }}];
         var _MapProviderUrl = '{{ map_provider_url }}';
@@ -33,13 +33,13 @@
     </div>
     <ul class="nav nav-pills nav-justified nav-settings">
       <li class="active">
-        <a href="#" data-panel="filters">Filters</a>
+        <a href="#" data-panel="filters">Filter</a>
       </li>
       <li>
         <a href="#" data-panel="raids">Raids</a>
       </li>
       <li>
-        <a href="#" data-panel="more">More</a>
+        <a href="#" data-panel="more">Mehr</a>
       </li>
     </ul>
     <div class="panel panel-default settings-panel active" data-panel="filters">
