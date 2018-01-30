@@ -149,10 +149,10 @@ function getRaidPopupContent (raw) {
 
 function getGender (g) {
     if (g === 1) {
-        return " (Male)";
+        return " (Männlich)";
     }
     if (g === 2) {
-        return " (Female)";
+        return " (Weiblich)";
     }
     return "";
 }
