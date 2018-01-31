@@ -113,7 +113,7 @@ function getPopupContent (item) {
     } else {
         content += '<br>Verschwindet in: ' + expires_at + '<br>';
     }
-    content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Hidden" class="popup_filter_link">Hide</a>';
+    content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Hidden" class="popup_filter_link">Ausblenden</a>';
     content += '&nbsp; | &nbsp;';
 
     var userPref = getPreference('filter-'+item.pokemon_id);
