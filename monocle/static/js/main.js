@@ -515,7 +515,7 @@ function getPokestops() {
 
 function getWetter() {
     new Promise(function (resolve, reject) {
-        $.get('/wetter', function (response) {
+        $.get('/weather', function (response) {
             resolve(response);
         });
     }).then(function (data) {
