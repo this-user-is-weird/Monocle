@@ -65,9 +65,9 @@ var overlays = {
     Pokemon: L.layerGroup([]),
     Trash: L.layerGroup([]),
     Raids: L.layerGroup([]),
-    Gyms: L.layerGroup([]),
+    Arenen: L.layerGroup([]),
     Pokestops: L.layerGroup([]),
-    Weather: L.layerGroup([]),
+    Wetter: L.layerGroup([]),
     Workers: L.layerGroup([]),
     Spawns: L.layerGroup([]),
     ScanArea: L.layerGroup([])
@@ -90,8 +90,8 @@ function monitor (group, initial) {
 monitor(overlays.Pokemon, true)
 monitor(overlays.Trash, true)
 monitor(overlays.Raids, true)
-monitor(overlays.Gyms, true)
-monitor(overlays.Weather, true)
+monitor(overlays.Arenen, true)
+monitor(overlays.Wetter, true)
 monitor(overlays.Workers, true)
 
 function getPopupContent (item) {
@@ -120,7 +120,7 @@ function getPopupContent (item) {
     if (userPref == 'trash'){
         content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Pokemon" class="popup_filter_link">Nach Pokemon</a>';
     }else{
-        content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Trash" class="popup_filter_link">Nach Müll</a>';
+        content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Trash" class="popup_filter_link">Nach Trash</a>';
     }
     content += '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ item.lat + ','+ item.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
     return content;
@@ -370,7 +370,7 @@ function addRaidsToMap (data, map) {
     });
 }
 
-function addGymsToMap (data, map) {
+function addArenenToMap (data, map) {
     data.forEach(function (item) {
         // No change since last time? Then don't do anything
         var existing = markers[item.id];
@@ -378,11 +378,11 @@ function addGymsToMap (data, map) {
             if (existing.raw.sighting_id === item.sighting_id) {
                 return;
             }
-            existing.removeFrom(overlays.Gyms);
+            existing.removeFrom(overlays.Arenen);
             markers[item.id] = undefined;
         }
         marker = FortMarker(item);
-        marker.addTo(overlays.Gyms);
+        marker.addTo(overlays.Arenen);
     });
 }
 
@@ -416,8 +416,8 @@ function addPokestopsToMap (data, map) {
     });
 }
 
-function addWeatherToMap (data, map) {
-    overlays.Weather.clearLayers();
+function addWetterToMap (data, map) {
+    overlays.Wetter.clearLayers();
     data.forEach(function (item) {
         var color = 'grey';
         if (item.alert_severity > 0) {
@@ -431,8 +431,8 @@ function addWeatherToMap (data, map) {
         if (item.day === 2) {
             day = 'night';
         }
-        L.polygon(item.coords, {'color': color}).addTo(overlays.Weather);
-        L.imageOverlay('/static/monocle-icons/assets/weather_' + item.condition + '_' + day + '.png', [item.coords[0], item.coords[2]]).addTo(overlays.Weather);
+        L.polygon(item.coords, {'color': color}).addTo(overlays.Wetter);
+        L.imageOverlay('/static/monocle-icons/assets/weather_' + item.condition + '_' + day + '.png', [item.coords[0], item.coords[2]]).addTo(overlays.Wetter);
     });
 }
 
@@ -480,8 +480,8 @@ function getRaids () {
     });
 }
 
-function getGyms () {
-    if (overlays.Gyms.hidden) {
+function getArenen () {
+    if (overlays.Arenen.hidden) {
         return;
     }
     new Promise(function (resolve, reject) {
@@ -489,7 +489,7 @@ function getGyms () {
             resolve(response);
         });
     }).then(function (data) {
-        addGymsToMap(data, map);
+        addArenenToMap(data, map);
     });
 }
 
@@ -513,13 +513,13 @@ function getPokestops() {
     });
 }
 
-function getWeather() {
+function getWetter() {
     new Promise(function (resolve, reject) {
-        $.get('/weather', function (response) {
+        $.get('/wetter', function (response) {
             resolve(response);
         });
     }).then(function (data) {
-        addWeatherToMap(data, map);
+        addWetterToMap(data, map);
     });
 }
 
@@ -563,8 +563,8 @@ map.whenReady(function () {
     overlays.Raids.once('add', function(e) {
         getRaids();
     })
-    overlays.Gyms.once('add', function(e) {
-        getGyms();
+    overlays.Arenen.once('add', function(e) {
+        getArenen();
     })
     overlays.Spawns.once('add', function(e) {
         getSpawnPoints();
@@ -572,8 +572,8 @@ map.whenReady(function () {
     overlays.Pokestops.once('add', function(e) {
         getPokestops();
     })
-    overlays.Weather.once('add', function(e) {
-        getWeather();
+    overlays.Wetter.once('add', function(e) {
+        getWetter();
     })
     getScanAreaCoords();
     overlays.Workers.once('add', function(e) {
@@ -583,8 +583,8 @@ map.whenReady(function () {
     getPokemon();
     setInterval(getPokemon, 30000);
     setInterval(getRaids, 60000)
-    setInterval(getGyms, 110000)
-    setInterval(getWeather, 300000)
+    setInterval(getArenen, 110000)
+    setInterval(getWetter, 300000)
 });
 
 $("#settings>ul.nav>li>a").on('click', function(){
