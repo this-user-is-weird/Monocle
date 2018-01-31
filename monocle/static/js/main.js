@@ -246,15 +246,15 @@ function FortMarker (raw) {
             }
             var last_modified = new Date(raw.last_modified * 1000);
 
-            content += '<br><span style="font-size: smaller">Last Modified: ' + last_modified.toLocaleString() + '</span>' +
-                       '<br>Slots occupied: '+ (6 - raw.slots_available) + '/6' +
-                       '<br>Guarding Pokemon: ' + raw.pokemon_name + ' (#' + raw.pokemon_id + ')';
+            content += '<br><span style="font-size: smaller">Letztes Update: ' + last_modified.toLocaleString() + '</span>' +
+                       '<br>Belegte Plätze: '+ (6 - raw.slots_available) + '/6' +
+                       '<br>Verteidiger: ' + raw.pokemon_name + ' (#' + raw.pokemon_id + ')';
         }
         if(raw.img_url){
 			content += '<br><img src="' + raw.img_url + '" class="gym-icon"/>';
 		}
-		if(raw.gym_name){content += '<br>Gym Name: ' + raw.gym_name;}
-        content += '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ raw.lat + ','+ raw.lon +'" target="_blank" title="See in Google Maps">Get directions</a>';
+		if(raw.gym_name){content += '<br>Name: ' + raw.gym_name;}
+        content += '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ raw.lat + ','+ raw.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
         event.popup.setContent(content);
     });
     marker.bindPopup();
@@ -612,7 +612,7 @@ $('.my-settings').on('click', function () {
 
 $('#reset_btn').on('click', function () {
     // Reset button in Settings>More
-    if (confirm("This will reset all your preferences. Are you sure?")){
+    if (confirm("Willst du wirklich alle Einstellungen zurücksetzen?")){
         localStorage.clear();
         location.reload();
     }
@@ -693,7 +693,7 @@ function populateSettingsPanels(){
                          '<div class="btn-group" role="group" data-group="filter-'+i+'">' +
                            '<button type="button" class="btn btn-default" data-id="'+i+'" data-value="pokemon">Pokémon</button>' +
                            '<button type="button" class="btn btn-default" data-id="'+i+'" data-value="trash">Trash</button>' +
-                           '<button type="button" class="btn btn-default" data-id="'+i+'" data-value="hidden">Hide</button>' +
+                           '<button type="button" class="btn btn-default" data-id="'+i+'" data-value="hidden">Ausblenden</button>' +
                          '</div>' +
                        '</div>';
         newHtml += partHtml
@@ -707,8 +707,8 @@ function populateSettingsPanels(){
         var partHtml = '<div class="text-center">' +
                           '<span class="raid-label">Level ' + i + ' (' + _raids_labels[i-1] + ')</span>' +
                           '<div class="btn-group" role="group" data-group="raids-'+i+'">' +
-                            '<button type="button" class="btn btn-default" data-id="'+i+'" data-value="show">Show</button>' +
-                            '<button type="button" class="btn btn-default" data-id="'+i+'" data-value="hide">Hide</button>' +
+                            '<button type="button" class="btn btn-default" data-id="'+i+'" data-value="show">Einblenden</button>' +
+                            '<button type="button" class="btn btn-default" data-id="'+i+'" data-value="hide">Ausblenden</button>' +
                           '</div>' +
                         '</div>';
         newHtml += partHtml
