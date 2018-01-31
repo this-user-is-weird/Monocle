@@ -236,13 +236,13 @@ function FortMarker (raw) {
         }
         else {
             if (raw.team === 1 ) {
-                content = '<b>Team Mystic</b>'
+                content = '<b>Team Weisheit</b>'
             }
             else if (raw.team === 2 ) {
-                content = '<b>Team Valor</b>'
+                content = '<b>Team Wagemut</b>'
             }
             else if (raw.team === 3 ) {
-                content = '<b>Team Instinct</b>'
+                content = '<b>Team Intuition</b>'
             }
             var last_modified = new Date(raw.last_modified * 1000);
 
@@ -308,7 +308,7 @@ function RaidMarker (raw) {
     }
 
 	markers[raw.id] = marker;
-    
+
  	marker.on('popupopen',function popupopen (event) {
         event.popup.options.autoPan = true; // Pan into view once
         event.popup.setContent(getRaidPopupContent(event.target.raw));
@@ -363,7 +363,7 @@ function addRaidsToMap (data, map) {
             markers[item.id] = undefined;
         }
         var marker = RaidMarker(item);
-        
+
 		if (marker.overlay !== "Hidden"){
             marker.addTo(overlays[marker.overlay])
         }
@@ -644,7 +644,7 @@ $('#settings').on('click', '.settings-panel button', function () {
         moveToLayer(id, value, 'filter');
     }else if (key.indexOf('raids-') > -1){
         // This is a raid's filter button
-        moveToLayer(id, value, 'raids');		
+        moveToLayer(id, value, 'raids');
     }else{
         setPreference(key, value);
     }
