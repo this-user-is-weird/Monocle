@@ -134,14 +134,14 @@ function getRaidPopupContent (raw) {
 		var diff = (raw.time_battle - new Date().getTime() / 1000);
 		var minutes = parseInt(diff / 60);
     	var seconds = parseInt(diff - (minutes * 60));
-		content += 'Raid Battle: ' + minutes + 'm ' + seconds + 's<br>';
+		content += 'Raid beginnt in: ' + minutes + 'm ' + seconds + 's<br>';
 	}else{
     content += 'Attacke 1: ' + raw.move1 + '<br>';
     content += 'Attacke 2: ' + raw.move2 + '<br>';
 		var diff = (raw.time_end - new Date().getTime() / 1000);
 		var minutes = parseInt(diff / 60);
     	var seconds = parseInt(diff - (minutes * 60));
-		content += 'Endet: ' + minutes + 'm ' + seconds + 's<br>';
+		content += 'Endet in: ' + minutes + 'm ' + seconds + 's<br>';
 	}
     content += '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ raw.lat + ','+ raw.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
     return content;
