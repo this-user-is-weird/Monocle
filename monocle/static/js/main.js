@@ -250,9 +250,9 @@ function FortMarker (raw) {
                        '<br>Belegte Plätze: '+ (6 - raw.slots_available) + '/6' +
                        '<br>Verteidiger: ' + raw.pokemon_name + ' (#' + raw.pokemon_id + ')';
         }
-        /**if(raw.img_url){
+        if(raw.img_url){
 			content += '<br><img src="' + raw.img_url + '" class="gym-icon"/>';
-		*/}
+		}
 		if(raw.gym_name){content += '<br>Name: ' + raw.gym_name;}
         content += '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ raw.lat + ','+ raw.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
         event.popup.setContent(content);
