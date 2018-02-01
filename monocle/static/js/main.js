@@ -143,6 +143,7 @@ function getRaidPopupContent (raw) {
     	var seconds = parseInt(diff - (minutes * 60));
 		content += 'Endet in: ' + minutes + 'm ' + seconds + 's<br>';
 	}
+  if(raw.gym_name){content += '<br>Name: ' + raw.gym_name;}
     content += '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ raw.lat + ','+ raw.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
     return content;
 }
