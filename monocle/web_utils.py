@@ -155,6 +155,7 @@ def get_raid_markers(names=POKEMON, moves=MOVES):
                 'lon': fort.lon,
                 'time_spawn': raid.time_spawn,
                 'time_battle': raid.time_battle,
+                'gym_name': fort.name,
                 'time_end': raid.time_end
                 })
 

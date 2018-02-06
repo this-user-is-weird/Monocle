@@ -142,8 +142,8 @@ function getRaidPopupContent (raw) {
 		var minutes = parseInt(diff / 60);
     	var seconds = parseInt(diff - (minutes * 60));
 		content += 'Endet in: ' + minutes + 'm ' + seconds + 's<br>';
-	}
-  if(raw.gym_name){content += '<br>Name: ' + raw.gym_name;}
+    }
+    if(raw.gym_name){content += '<br>Arena: ' + raw.gym_name;}
     content += '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ raw.lat + ','+ raw.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
     return content;
 }
@@ -252,9 +252,9 @@ function FortMarker (raw) {
                        '<br>Verteidiger: ' + raw.pokemon_name + ' (#' + raw.pokemon_id + ')';
         }
         if(raw.img_url){
-			content += '<br><img src="' + raw.img_url + '" class="gym-icon"/>';
+			content += '<br><img src="' + raw.img_url + '" class="gym-icon img-responsive"/>';
 		}
-		if(raw.gym_name){content += '<br>Name: ' + raw.gym_name;}
+        if(raw.gym_name){content += '<br>Arena: ' + raw.gym_name;}
         content += '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ raw.lat + ','+ raw.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
         event.popup.setContent(content);
     });
