@@ -108,8 +108,8 @@ function getPopupContent (item) {
         content += 'Verschwindet in: ' + expires_at + '<br>';
         content += 'Attacke 1: ' + item.move1 + ' ( ' + item.damage1 + ' dps )<br>';
         content += 'Attacke 2: ' + item.move2 + ' ( ' + item.damage2 + ' dps )<br>';
-        content += 'IV: ' + item.atk + ' atk, ' + item.def + ' def, ' + item.sta + ' sta<br>';
-        content += 'CP: ' + item.cp + ' | Lvl: ' + item.level + '<br>';
+        content += 'IV: ' + item.atk + ' Angr, ' + item.def + ' Vert, ' + item.sta + ' KP<br>';
+        content += 'WP: ' + item.cp + ' | LVL: ' + item.level + '<br>';
     } else {
         content += '<br>Verschwindet in: ' + expires_at + '<br>';
     }
