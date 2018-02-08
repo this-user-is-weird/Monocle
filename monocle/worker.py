@@ -65,7 +65,7 @@ class Worker:
     download_hash = ''
     scan_delay = conf.SCAN_DELAY if conf.SCAN_DELAY >= 10 else 10
     g = {'seen': 0, 'captchas': 0}
-    more_point_cell_cache = TtlCache(ttl=300) 
+    more_point_cell_cache = TtlCache(ttl=300)
     has_raiders = (conf.RAIDERS_PER_GYM and conf.RAIDERS_PER_GYM > 0)
     scan_gym = conf.GYM_NAMES or conf.GYM_DEFENDERS
     passive_scan_gym = (scan_gym and not has_raiders)
@@ -113,7 +113,7 @@ class Worker:
         self.captcha_queue = captcha_queue
         self.worker_dict = worker_dict
         self.account_dict = account_dict
-        
+
         # account information
         try:
             self.account = self.account_queue.get_nowait()
@@ -146,7 +146,7 @@ class Worker:
             self.player_level = self.account.get('level', 0)
             self.initialize_api()
         else:
-            self.last_request = 0 
+            self.last_request = 0
             self.items = {}
             self.bag_items = 0
             self.inventory_timestamp = 0
@@ -174,7 +174,7 @@ class Worker:
         self.last_encounter = int(round(time() * 1000))
 
     def needs_sleep(self):
-        return True 
+        return True
 
     def min_level(self):
         return 0
@@ -263,7 +263,7 @@ class Worker:
             raise err
 
         self.error_code = '°'
-        version = 8900
+        version = 9100
         async with self.sim_semaphore:
             self.error_code = 'APP SIMULATION'
             if conf.APP_SIMULATION:
@@ -690,9 +690,9 @@ class Worker:
             else:
                 if (not dl_hash
                         and conf.FORCED_KILL
-                        and dl_settings.settings.minimum_client_version != '0.89.1'):
+                        and dl_settings.settings.minimum_client_version != '0.91.0'):
                     forced_version = StrictVersion(dl_settings.settings.minimum_client_version)
-                    if forced_version > StrictVersion('0.89.1'):
+                    if forced_version > StrictVersion('0.91.0'):
                         err = '{} is being forced, exiting.'.format(forced_version)
                         self.log.error(err)
                         print(err)
@@ -965,7 +965,7 @@ class Worker:
         if conf.ITEM_LIMITS and self.bag_items >= self.item_capacity:
             await self.clean_bag()
 
-            
+
         if map_objects.client_weather:
             for w in map_objects.client_weather:
                 weather = Weather.normalize_weather(w, map_objects.time_of_day)
@@ -1007,17 +1007,17 @@ class Worker:
                 if not encounter_id:
                     if self.should_skip_sighting(normalized, SIGHTING_CACHE):
                         continue
-                
+
                 # Check against insert list
                 sp_discovered = (normalized.get('despawn') is not None)
-                is_in_insert_blacklist = (conf.NO_DB_INSERT_IDS is not None and 
+                is_in_insert_blacklist = (conf.NO_DB_INSERT_IDS is not None and
                         normalized['pokemon_id'] in conf.NO_DB_INSERT_IDS)
                 skip_insert = (sp_discovered and is_in_insert_blacklist)
 
                 self.log.debug('Pokemon: {}, sp: {}, sp_discovered: {}, in_blacklist: {}, skip_insert: {}',
                         normalized['pokemon_id'], spawn_id, sp_discovered, is_in_insert_blacklist, skip_insert)
 
-                # Do not insert to db for this pokemon 
+                # Do not insert to db for this pokemon
                 if skip_insert:
                     db_proc.count += 1
                     continue
@@ -1026,7 +1026,7 @@ class Worker:
                         (not self.player_level or self.player_level < 30))
                 should_notify = self.should_notify(normalized)
                 should_encounter = (sp_discovered and self.should_encounter(normalized, should_notify=should_notify))
-                    
+
                 if encounter_id:
                     cache = self.overseer.ENCOUNTER_CACHE if should_encounter else SIGHTING_CACHE
                     if self.should_skip_sighting(normalized, cache):
@@ -1231,7 +1231,7 @@ class Worker:
 
         if gmo_success:
             if not seen_encounter:
-                return -1 
+                return -1
 
             if not seen_gym:
                 if forts_seen > 0:
@@ -1303,7 +1303,7 @@ class Worker:
 
         await self.update_accounts_dict()
         self.handle = LOOP.call_later(60, self.unset_code)
-        return 1 
+        return 1
 
     def should_skip_sighting(self, sighting, cache):
         # Check if already marked for save as sighting
@@ -1408,16 +1408,16 @@ class Worker:
                 name, distance, self.speed, UNIT_STRING)
 
         self.error_code = '!'
-        
-        return gym 
+
+        return gym
 
     async def spin_pokestop(self, pokestop):
         self.error_code = '$'
         pokestop_location = pokestop.latitude, pokestop.longitude
-        
+
         # randomize location up to ~1.5 meters
         self.simulate_jitter(amount=0.00001)
-        
+
         distance = get_distance(self.location, pokestop_location)
         # permitted interaction distance - 4 (for some jitter leeway)
         # estimation of spinning speed limit
@@ -1425,7 +1425,7 @@ class Worker:
             self.error_code = '!'
             return False
 
-        #adding a short sleep period increases spinning success 
+        #adding a short sleep period increases spinning success
         await self.random_sleep(0.8, 1.8)
 
         request = self.api.create_request()
@@ -1731,7 +1731,7 @@ class Worker:
             self.account['expiry'] = self.api.auth_provider._access_token_expiry
         except AttributeError:
             pass
-        
+
         ACCOUNTS = self.account_dict
         if 'remove' in self.account and self.account['remove']:
             if self.username in ACCOUNTS:
@@ -1777,13 +1777,13 @@ class Worker:
         else:
             self.account['banned'] = True
             log_message = "Hibernating {} due to ban.".format(self.username, self.player_level)
-            
-        self.log.warning(log_message)            
+
+        self.log.warning(log_message)
         LOOP.create_task(self.notifier.hibernate_webhook(self.username, self.player_level, log_message))
-        
+
         await self.update_accounts_dict()
         self.username = None
-        self.account = None      
+        self.account = None
         await self.new_account(after_remove=True)
 
     async def bench_account(self):
@@ -1881,7 +1881,7 @@ class Worker:
 
     def prioritize_forts(self, map_cell_forts):
 
-        # Filter gyms that are nearby 
+        # Filter gyms that are nearby
         forts = [ x for x in map_cell_forts if x.type == 0 and self.within_distance(x, max_distance=445)]
 
         raids_to_check = [ x for x in forts if x.HasField("raid_info") and (x not in RAID_CACHE)]
@@ -2095,4 +2095,3 @@ class CaptchaSolveException(Exception):
 class OverseerNotRunningException(Exception):
     """Raised when overseer is no longer running."""
     pass
-
