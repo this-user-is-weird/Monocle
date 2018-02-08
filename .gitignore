@@ -147,3 +147,7 @@ monotailer*.tgz
 
 ### Logs ###
 logs/
+
+### Sublime Text ###
+*.sublime-project
+*.sublime-workspace
