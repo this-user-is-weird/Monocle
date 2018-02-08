@@ -14,7 +14,7 @@ var PokemonIcon = L.Icon.extend({
         div.innerHTML =
             '<div class="pokemarker">' +
               '<div class="pokeimg">' +
-                   '<img class="leaflet-marker-icon" src="' + this.options.iconUrl + '" />' +
+                   '<img class="leaflet-marker-icon ' + (!isNaN(this.options.ivSum) && this.options.ivSum >= 43 ? 'jump-quirly' : '') + '" src="' + this.options.iconUrl + '" />' +
               '</div>' +
               '<div class="remaining_text" data-expire="' + this.options.expires_at + '">' + calculateRemainingTime(this.options.expires_at) + '</div>' +
             '</div>';
@@ -173,7 +173,11 @@ function getOpacity (diff) {
 }
 
 function PokemonMarker (raw) {
-    var icon = new PokemonIcon({iconUrl: '/static/monocle-icons/icons/' + raw.pokemon_id + '.png', expires_at: raw.expires_at});
+    var icon = new PokemonIcon({
+        iconUrl: '/static/monocle-icons/icons/' + raw.pokemon_id + '.png',
+        expires_at: raw.expires_at,
+        ivSum: (raw.atk + raw.def + raw.sta)
+    });
     var marker = L.marker([raw.lat, raw.lon], {icon: icon, opacity: 1});
 
     var intId = parseInt(raw.id.split('-')[1]);
