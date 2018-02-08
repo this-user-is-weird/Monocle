@@ -14,7 +14,7 @@ var PokemonIcon = L.Icon.extend({
         div.innerHTML =
             '<div class="pokemarker">' +
               '<div class="pokeimg">' +
-                   '<img class="leaflet-marker-icon ' + (!isNaN(this.options.ivSum) && this.options.ivSum >= 43 ? 'jump-quirly' : '') + '" src="' + this.options.iconUrl + '" />' +
+                   '<img class="leaflet-marker-icon ' + (!isNaN(this.options.ivSum) && (this.options.ivSum >= 41 || this.options.ivSum === 0) ? 'jump-quirly' : '') + '" src="' + this.options.iconUrl + '" />' +
               '</div>' +
               '<div class="remaining_text" data-expire="' + this.options.expires_at + '">' + calculateRemainingTime(this.options.expires_at) + '</div>' +
             '</div>';
