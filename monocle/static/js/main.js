@@ -101,17 +101,20 @@ function getPopupContent (item) {
     var gender = getGender(item.gender);
     var form = getForm(item.form);
     var expires_at = minutes + 'm ' + seconds + 's';
+    var expires_date = new Date(item.expires_at * 1000);
     var content = '<b>' + item.name + gender + form + '</b> - <a href="https://pokemongo.gamepress.gg/pokemon/' + item.pokemon_id + '">#' + item.pokemon_id + '</a>';
     if(item.atk != undefined){
         var totaliv = 100 * (item.atk + item.def + item.sta) / 45;
         content += ' - <b>' + totaliv.toFixed(2) + '%</b><br>';
         content += 'Verschwindet in: ' + expires_at + '<br>';
+        content += 'Verschwindet um: ' + expires_date.getHours() + ':' + expires_date.getMinutes() + '<br>';
         content += 'Attacke 1: ' + item.move1 + ' ( ' + item.damage1 + ' dps )<br>';
         content += 'Attacke 2: ' + item.move2 + ' ( ' + item.damage2 + ' dps )<br>';
         content += 'IV: ' + item.atk + ' Angr, ' + item.def + ' Vert, ' + item.sta + ' Kraf<br>';
         content += 'WP: ' + item.cp + ' | LVL: ' + item.level + '<br>';
     } else {
         content += '<br>Verschwindet in: ' + expires_at + '<br>';
+        content += 'Verschwindet um: ' + expires_date.getHours() + ':' + expires_date.getMinutes() + '<br>';
     }
     content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Hidden" class="popup_filter_link">Ausblenden</a>';
     content += '&nbsp; | &nbsp;';
