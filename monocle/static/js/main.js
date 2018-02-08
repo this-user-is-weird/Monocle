@@ -107,14 +107,14 @@ function getPopupContent (item) {
         var totaliv = 100 * (item.atk + item.def + item.sta) / 45;
         content += ' - <b>' + totaliv.toFixed(2) + '%</b><br>';
         content += 'Verschwindet in: ' + expires_at + '<br>';
-        content += 'Verschwindet um: ' + expires_date.getHours() + ':' + expires_date.getMinutes() + '<br>';
+        content += 'Verschwindet um: ' + expires_date.getHours() + ':' + expires_date.getMinutes() + ' Uhr<br>';
         content += 'Attacke 1: ' + item.move1 + ' ( ' + item.damage1 + ' dps )<br>';
         content += 'Attacke 2: ' + item.move2 + ' ( ' + item.damage2 + ' dps )<br>';
         content += 'IV: ' + item.atk + ' Angr, ' + item.def + ' Vert, ' + item.sta + ' Kraf<br>';
         content += 'WP: ' + item.cp + ' | LVL: ' + item.level + '<br>';
     } else {
         content += '<br>Verschwindet in: ' + expires_at + '<br>';
-        content += 'Verschwindet um: ' + expires_date.getHours() + ':' + expires_date.getMinutes() + '<br>';
+        content += 'Verschwindet um: ' + expires_date.getHours() + ':' + expires_date.getMinutes() + ' Uhr<br>';
     }
     content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Hidden" class="popup_filter_link">Ausblenden</a>';
     content += '&nbsp; | &nbsp;';
