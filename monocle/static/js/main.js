@@ -11,10 +11,22 @@ var PokemonIcon = L.Icon.extend({
     },
     createIcon: function() {
         var div = document.createElement('div');
+
+        let animationClass = '';
+        if (!isNaN(this.options.ivSum)) {
+            if (this.options.ivSum === 45 || this.options.ivSum === 0) {
+                animationClass = 'jump-quirly';
+            } else if (this.options.ivSum >= 43) {
+                animationClass = 'jump';
+            } else if (this.options.ivSum >= 41) {
+                animationClass = 'shake';
+            }
+        }
+        
         div.innerHTML =
             '<div class="pokemarker">' +
               '<div class="pokeimg">' +
-                   '<img class="leaflet-marker-icon ' + (!isNaN(this.options.ivSum) && (this.options.ivSum >= 41 || this.options.ivSum === 0) ? 'jump-quirly' : '') + '" src="' + this.options.iconUrl + '" />' +
+                   '<img class="leaflet-marker-icon ' + animationClass + '" src="' + this.options.iconUrl + '" />' +
               '</div>' +
               '<div class="remaining_text" data-expire="' + this.options.expires_at + '">' + calculateRemainingTime(this.options.expires_at) + '</div>' +
             '</div>';
