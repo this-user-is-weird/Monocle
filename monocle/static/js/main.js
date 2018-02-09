@@ -22,7 +22,7 @@ var PokemonIcon = L.Icon.extend({
                 animationClass = 'shake';
             }
         }
-        
+
         div.innerHTML =
             '<div class="pokemarker">' +
               '<div class="pokeimg">' +
@@ -74,6 +74,7 @@ var PokestopIcon = L.Icon.extend({
 
 var markers = {};
 var overlays = {
+    IV: L.layerGroup([]),
     Pokemon: L.layerGroup([]),
     Trash: L.layerGroup([]),
     Raids: L.layerGroup([]),
@@ -99,12 +100,13 @@ function monitor (group, initial) {
     group.on('remove', setHidden);
 }
 
-monitor(overlays.Pokemon, true)
-monitor(overlays.Trash, true)
-monitor(overlays.Raids, true)
-monitor(overlays.Arenen, true)
-monitor(overlays.Wetter, true)
-monitor(overlays.Workers, true)
+monitor(overlays.IV, true);
+monitor(overlays.Pokemon, true);
+monitor(overlays.Trash, true);
+monitor(overlays.Raids, true);
+monitor(overlays.Arenen, true);
+monitor(overlays.Wetter, true);
+monitor(overlays.Workers, true);
 
 function getPopupContent (item) {
     var diff = (item.expires_at - new Date().getTime() / 1000);
@@ -200,13 +202,20 @@ function PokemonMarker (raw) {
         _last_pokemon_id = intId;
     }
 
-    if (raw.trash) {
+    const hasRareIV = hasRareIV(raw);
+
+    if (hasRareIV) {
+        marker.overlay = 'IV';
+    } else if (raw.trash) {
         marker.overlay = 'Trash';
     } else {
         marker.overlay = 'Pokemon';
     }
+    
     var userPreference = getPreference('filter-'+raw.pokemon_id);
-    if (userPreference === 'pokemon'){
+    if (hasRareIV) {
+        marker.overlay = 'IV';
+    } else if (userPreference === 'pokemon'){
         marker.overlay = 'Pokemon';
     }else if (userPreference === 'trash'){
         marker.overlay = 'Trash';
@@ -475,7 +484,7 @@ function addWorkersToMap (data, map) {
 }
 
 function getPokemon () {
-    if (overlays.Pokemon.hidden && overlays.Trash.hidden) {
+    if (overlays.IV.hidden && overlays.Pokemon.hidden && overlays.Trash.hidden) {
         return;
     }
     new Promise(function (resolve, reject) {
@@ -568,8 +577,8 @@ function getWorkers() {
 
 var map = L.map('main-map', {preferCanvas: true}).setView(_MapCoords, 13);
 
+overlays.IV.addTo(map);
 overlays.Pokemon.addTo(map);
-overlays.ScanArea.addTo(map);
 
 var control = L.control.layers(null, overlays).addTo(map);
 L.tileLayer(_MapProviderUrl, {
@@ -678,10 +687,13 @@ function moveToLayer(id, layer, type){
 		    var m = markers[k];
 		    if ((k.indexOf("pokemon-") > -1) && (m !== undefined) && (m.raw.pokemon_id === id)){
 		        m.removeFrom(overlays[m.overlay]);
-		        if (layer === 'pokemon'){
+                if (layer === 'IV') {
+                    m.overlay = "IV";
+                    m.addTo(overlays.IV);
+		        } else if (layer === 'pokemon') {
 		            m.overlay = "Pokemon";
 		            m.addTo(overlays.Pokemon);
-		        }else if (layer === 'trash') {
+		        } else if (layer === 'trash') {
 		            m.overlay = "Trash";
 		            m.addTo(overlays.Trash);
 		        }
@@ -816,5 +828,14 @@ function updateTime() {
         $(".remaining_text_raids").each(function() {
             $(this).css('visibility', 'hidden');
         });
+    }
+}
+
+function hasRareIV(p) {
+    let ivSum = p.atk + p.def + p.sta;
+    if (!isNaN(ivSum)) {
+        return ivSum === 0 || ivSum >= 41;
+    } else {
+        return false;
     }
 }
