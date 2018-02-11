@@ -202,9 +202,9 @@ function PokemonMarker (raw) {
         _last_pokemon_id = intId;
     }
 
-    const hasRareIV = hasRareIV(raw);
+    const rareIV = hasRareIV(raw);
 
-    if (hasRareIV) {
+    if (rareIV) {
         marker.overlay = 'IV';
     } else if (raw.trash) {
         marker.overlay = 'Trash';
@@ -213,7 +213,7 @@ function PokemonMarker (raw) {
     }
     
     var userPreference = getPreference('filter-'+raw.pokemon_id);
-    if (hasRareIV) {
+    if (rareIV) {
         marker.overlay = 'IV';
     } else if (userPreference === 'pokemon'){
         marker.overlay = 'Pokemon';
