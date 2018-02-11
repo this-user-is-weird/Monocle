@@ -130,15 +130,20 @@ function getPopupContent (item) {
         content += '<br>Verschwindet in: ' + expires_at + '<br>';
         content += 'Verschwindet um: ' + expires_date.getHours() + ':' + expires_date.getMinutes() + ' Uhr<br>';
     }
-    content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Hidden" class="popup_filter_link">Ausblenden</a>';
-    content += '&nbsp; | &nbsp;';
 
-    var userPref = getPreference('filter-'+item.pokemon_id);
-    if (userPref == 'trash'){
-        content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Pokemon" class="popup_filter_link">Nach Pokemon</a>';
-    }else{
-        content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Trash" class="popup_filter_link">Nach Trash</a>';
+    if (!hasRareIV(item)) {
+        content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Hidden" class="popup_filter_link">Ausblenden</a>';
+        content += '&nbsp; | &nbsp;';
+
+        var userPref = getPreference('filter-'+item.pokemon_id);
+        if (userPref == 'trash'){
+            content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Pokemon" class="popup_filter_link">Nach Pokemon</a>';
+        }else{
+            content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Trash" class="popup_filter_link">Nach Trash</a>';
+        }
     }
+
+
     content += '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ item.lat + ','+ item.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
     return content;
 }
