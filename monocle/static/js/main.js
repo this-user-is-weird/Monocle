@@ -74,7 +74,7 @@ var PokestopIcon = L.Icon.extend({
 
 var markers = {};
 var overlays = {
-    IV: L.layerGroup([]),
+    SelteneIV: L.layerGroup([]),
     Pokemon: L.layerGroup([]),
     Trash: L.layerGroup([]),
     Raids: L.layerGroup([]),
@@ -100,7 +100,7 @@ function monitor (group, initial) {
     group.on('remove', setHidden);
 }
 
-monitor(overlays.IV, true);
+monitor(overlays.SelteneIV, true);
 monitor(overlays.Pokemon, true);
 monitor(overlays.Trash, true);
 monitor(overlays.Raids, true);
@@ -484,7 +484,7 @@ function addWorkersToMap (data, map) {
 }
 
 function getPokemon () {
-    if (overlays.IV.hidden && overlays.Pokemon.hidden && overlays.Trash.hidden) {
+    if (overlays.SelteneIV.hidden && overlays.Pokemon.hidden && overlays.Trash.hidden) {
         return;
     }
     new Promise(function (resolve, reject) {
@@ -577,7 +577,7 @@ function getWorkers() {
 
 var map = L.map('main-map', {preferCanvas: true}).setView(_MapCoords, 13);
 
-overlays.IV.addTo(map);
+overlays.SelteneIV.addTo(map);
 overlays.Pokemon.addTo(map);
 
 var control = L.control.layers(null, overlays).addTo(map);
@@ -689,7 +689,7 @@ function moveToLayer(id, layer, type){
 		        m.removeFrom(overlays[m.overlay]);
                 if (layer === 'IV') {
                     m.overlay = "IV";
-                    m.addTo(overlays.IV);
+                    m.addTo(overlays.SelteneIV);
 		        } else if (layer === 'pokemon') {
 		            m.overlay = "Pokemon";
 		            m.addTo(overlays.Pokemon);
