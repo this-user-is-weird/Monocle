@@ -686,11 +686,11 @@ function moveToLayer(id, layer, type){
 		for(var k in markers) {
 		    var m = markers[k];
 		    if ((k.indexOf("pokemon-") > -1) && (m !== undefined) && (m.raw.pokemon_id === id)){
-		        m.removeFrom(overlays[m.overlay]);
-                if (layer === 'IV') {
-                    m.overlay = "IV";
-                    m.addTo(overlays.SelteneIV);
-		        } else if (layer === 'pokemon') {
+                if (m.overlay === "SelteneIV") {
+                    continue;
+                }
+                m.removeFrom(overlays[m.overlay]);
+                 if (layer === 'pokemon') {
 		            m.overlay = "Pokemon";
 		            m.addTo(overlays.Pokemon);
 		        } else if (layer === 'trash') {
