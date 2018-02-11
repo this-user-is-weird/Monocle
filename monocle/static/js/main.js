@@ -205,7 +205,7 @@ function PokemonMarker (raw) {
     const rareIV = hasRareIV(raw);
 
     if (rareIV) {
-        marker.overlay = 'IV';
+        marker.overlay = '';
     } else if (raw.trash) {
         marker.overlay = 'Trash';
     } else {
@@ -214,7 +214,7 @@ function PokemonMarker (raw) {
     
     var userPreference = getPreference('filter-'+raw.pokemon_id);
     if (rareIV) {
-        marker.overlay = 'IV';
+        marker.overlay = 'SelteneIV';
     } else if (userPreference === 'pokemon'){
         marker.overlay = 'Pokemon';
     }else if (userPreference === 'trash'){
@@ -690,7 +690,7 @@ function moveToLayer(id, layer, type){
                     continue;
                 }
                 m.removeFrom(overlays[m.overlay]);
-                 if (layer === 'pokemon') {
+                if (layer === 'pokemon') {
 		            m.overlay = "Pokemon";
 		            m.addTo(overlays.Pokemon);
 		        } else if (layer === 'trash') {
