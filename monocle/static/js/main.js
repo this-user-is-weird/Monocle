@@ -144,7 +144,7 @@ function getPopupContent (item) {
     }
 
 
-    content += '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ item.lat + ','+ item.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
+    content += '<br>=&gt; <a href="https://www.google.com/maps/dir/?api=1&destination='+ item.lat + ','+ item.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
     return content;
 }
 
@@ -166,7 +166,7 @@ function getRaidPopupContent (raw) {
 		content += 'Endet in: ' + minutes + 'm ' + seconds + 's<br>';
     }
     if(raw.gym_name){content += '<br>Arena: ' + raw.gym_name;}
-    content += '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ raw.lat + ','+ raw.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
+    content += '<br>=&gt; <a href="https://www.google.com/maps/dir/?api=1&destination='+ raw.lat + ','+ raw.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
     return content;
 }
 
@@ -216,7 +216,7 @@ function PokemonMarker (raw) {
     } else {
         marker.overlay = 'Pokemon';
     }
-    
+
     var userPreference = getPreference('filter-'+raw.pokemon_id);
     if (rareIV) {
         marker.overlay = 'SelteneIV';
@@ -288,7 +288,7 @@ function FortMarker (raw) {
 			content += '<br><img src="' + raw.img_url + '" class="gym-icon img-responsive"/>';
 		}
         if(raw.gym_name){content += '<br>Arena: ' + raw.gym_name;}
-        content += '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ raw.lat + ','+ raw.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
+        content += '<br>=&gt; <a href="https://www.google.com/maps/dir/?api=1&destination='+ raw.lat + ','+ raw.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
         event.popup.setContent(content);
     });
     marker.bindPopup();
@@ -434,7 +434,7 @@ function addSpawnsToMap (data, map) {
         circle.bindPopup('<b>Spawn ' + item.spawn_id + '</b>' +
                          '<br/>despawn: ' + time +
                          '<br/>duration: '+ (item.duration == null ? '30mn' : item.duration + 'mn') +
-                         '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ item.lat + ','+ item.lon +'" target="_blank" title="See in Google Maps">Get directions</a>');
+                         '<br>=&gt; <a href="https://www.google.com/maps/dir/?api=1&destination='+ item.lat + ','+ item.lon +'" target="_blank" title="See in Google Maps">Get directions</a>');
         circle.addTo(overlays.Spawns);
     });
 }
@@ -445,7 +445,7 @@ function addPokestopsToMap (data, map) {
         var marker = L.marker([item.lat, item.lon], {icon: icon});
         marker.raw = item;
         marker.bindPopup('<b>Pokestop: ' + item.external_id + '</b>' +
-                         '<br>=&gt; <a href="https://www.google.com/maps/?daddr='+ item.lat + ','+ item.lon +'" target="_blank" title="See in Google Maps">Get directions</a>');
+                         '<br>=&gt; <a href="https://www.google.com/maps/dir/?api=1&destination='+ item.lat + ','+ item.lon +'" target="_blank" title="See in Google Maps">Get directions</a>');
         marker.addTo(overlays.Pokestops);
     });
 }
