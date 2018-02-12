@@ -29,7 +29,7 @@ def render_map():
         map_provider_url=conf.MAP_PROVIDER_URL,
         map_provider_attribution=conf.MAP_PROVIDER_ATTRIBUTION
     )
-    
+
 @app.route('/')
 def fullmap(map_html=render_map()):
     return map_html
@@ -79,7 +79,7 @@ def parks():
 
 @app.route('/cells')
 def cells():
-    return jsonify(get_s2_cells(level=12))
+    return jsonify(get_s2_cells(level=13))
 
 @app.route('/scan_coords')
 def scan_coords():
