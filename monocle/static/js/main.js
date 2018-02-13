@@ -590,9 +590,18 @@ L.tileLayer(_MapProviderUrl, {
     opacity: 0.75,
     attribution: _MapProviderAttribution
 }).addTo(map);
+
+var mypos = undefined;
 map.whenReady(function () {
     $('.my-location').on('click', function () {
-        map.locate({ enableHighAccurracy: true, setView: true });
+        map.locate({enableHighAccurracy: true, setView: true, maxZoom: 15})
+        map.on('locationfound', (e) => {
+            if (mypos !== undefined) {
+                map.removeLayer(mypos);
+            }
+            mypos = L.marker(e.latlng).addTo(map);
+            map.addLayer(mypos);
+        });
     });
     overlays.Raids.once('add', function(e) {
         getRaids();
