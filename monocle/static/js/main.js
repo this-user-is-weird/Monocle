@@ -119,7 +119,7 @@ function getPopupContent (item) {
     var content = '<b>' + item.name + gender + form + '</b> - <a href="https://pokemongo.gamepress.gg/pokemon/' + item.pokemon_id + '">#' + item.pokemon_id + '</a>';
     if(item.atk != undefined){
         var totaliv = 100 * (item.atk + item.def + item.sta) / 45;
-        content += ' - <b>' + totaliv.toFixed(2) + '%</b><br>';
+        content += ' - <b>' + Math.round(totaliv) + '%</b><br>';
         content += 'Verschwindet in: ' + expires_at + '<br>';
         content += 'Verschwindet um: ' + expires_date.getHours() + ':' + expires_date.getMinutes() + ' Uhr<br>';
         content += 'Attacke 1: ' + item.move1 + ' ( ' + item.damage1 + ' dps )<br>';
