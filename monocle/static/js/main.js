@@ -587,9 +587,6 @@ function getWorkers() {
 
 var map = L.map('main-map', {preferCanvas: true}).setView(_MapCoords, 13);
 
-overlays.SelteneIV.addTo(map);
-overlays.Pokemon.addTo(map);
-
 var control = L.control.layers(null, overlays).addTo(map);
 L.tileLayer(_MapProviderUrl, {
     opacity: 0.75,
@@ -608,25 +605,46 @@ map.whenReady(function () {
             map.addLayer(mypos);
         });
     });
+
     overlays.Raids.once('add', function(e) {
         getRaids();
-    })
+    });
     overlays.Arenen.once('add', function(e) {
         getArenen();
-    })
+    });
     overlays.Spawns.once('add', function(e) {
         getSpawnPoints();
-    })
+    });
     overlays.Pokestops.once('add', function(e) {
         getPokestops();
-    })
+    });
     overlays.Wetter.once('add', function(e) {
         getWetter();
-    })
+    });
     getScanAreaCoords();
     overlays.Workers.once('add', function(e) {
         getWorkers();
-    })
+    });
+
+    /* remember overlays */
+    map.on('overlayadd', (e)=> {
+        setPreference(`overlay-${e.name}`, 1);
+    });
+    map.on('overlayremove', (e)=> {
+        setPreference(`overlay-${e.name}`, 0);
+    });
+    for (var o in overlays) {
+        if (overlays.hasOwnProperty(o)) {
+            if (getPreference(`overlay-${o}`, "0") === "1") {
+
+                // no initial overlay display for "Trash", "Pokestops", "Spawns" - for performance reasons
+                if (["Trash", "Pokestops", "Spawns"].indexOf(o) === -1) {
+                    overlays[o].addTo(map);
+                }
+            }
+        }
+    }
+
     setInterval(getWorkers, 14000);
     getPokemon();
     setInterval(getPokemon, 30000);
@@ -780,6 +798,11 @@ function setSettingsDefaults(){
     };
     for (var i = 1; i <= _raids_count; i++){
         _defaultSettings['raids-'+i] = (_defaultSettings['RAIDS_FILTER'].indexOf(i) > -1) ? "show" : "hide";
+    };
+    for (var o in overlays) {
+        if (overlays.hasOwnProperty(o)) {
+            _defaultSettings[`overlay-${o}`] = (_defaultSettings['OVERLAYS'].indexOf(o) > -1) ? "1" : "0";
+        }
     };
 
     $("#settings div.btn-group").each(function(){
