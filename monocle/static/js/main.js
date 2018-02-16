@@ -45,7 +45,7 @@ var RaidIcon = L.Icon.extend({
                    '<img class="leaflet-marker-icon raid_egg" src="' + this.options.iconUrl + '" />' +
               '</div>' +
               '<div class="number_marker ' + this.options.team_color + '">' + this.options.level + '</div>' +
-              '<div class="remaining_text" data-expire="' + this.options.expires_at + '">' + calculateRemainingTime(this.options.expires_at) + '</div>' +
+              '<div class="remaining_text_raids" data-expire="' + this.options.expires_at + '">' + calculateRemainingTime(this.options.expires_at) + '</div>' +
             '</div>';
         return div;
     }
