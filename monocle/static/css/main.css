@@ -113,8 +113,13 @@
         height: 525px;
     }
 
-    .settings-panel>.panel-body{
-        height: 348px;
+    .settings-panel[data-panel="filters"]>.panel-body{
+        height: 315px;
+        overflow: auto;
+    }
+    .settings-panel[data-panel="more"]>.panel-body,
+    .settings-panel[data-panel="raids"]>.panel-body{
+        height: 356px;
         overflow: auto;
     }
 
@@ -267,4 +272,14 @@
 .shake {
     transform-origin: 50% 50%;
     animation: shake 1s linear alternate infinite;
+}
+
+div.gym-img-wrapper {
+    position: relative;
+}
+
+div.gym-img-wrapper img.gym-team-img {
+    position: absolute;
+    top: 0px;
+    right: -8px;
 }

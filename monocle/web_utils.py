@@ -244,7 +244,8 @@ def get_pokestop_markers():
     with session_scope() as session:
         pokestops = session.query(Pokestop)
         return [{
-            'external_id': pokestop.external_id,
+            'name': pokestop.name,
+            'url': pokestop.url,
             'lat': pokestop.lat,
             'lon': pokestop.lon
         } for pokestop in pokestops]
