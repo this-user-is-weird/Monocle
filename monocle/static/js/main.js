@@ -432,9 +432,9 @@ function addSpawnsToMap (data, map) {
             circle.setStyle({color: '#f03'})
         }
         circle.bindPopup('<b>Spawn ' + item.spawn_id + '</b>' +
-                         '<br/>despawn: ' + time +
-                         '<br/>duration: '+ (item.duration == null ? '30mn' : item.duration + 'mn') +
-                         '<br>=&gt; <a href="https://www.google.com/maps/dir/?api=1&destination='+ item.lat + ','+ item.lon +'" target="_blank" title="See in Google Maps">Get directions</a>');
+                         '<br/>Despawn: ' + time +
+                         '<br/>Dauer: '+ (item.duration == null ? '30mn' : item.duration + 'mn') +
+                         '<br>=&gt; <a href="https://www.google.com/maps/dir/?api=1&destination='+ item.lat + ','+ item.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>');
         circle.addTo(overlays.Spawns);
     });
 }
@@ -445,7 +445,7 @@ function addPokestopsToMap (data, map) {
         var marker = L.marker([item.lat, item.lon], {icon: icon});
         marker.raw = item;
         marker.bindPopup('<b>Pokestop: ' + item.external_id + '</b>' +
-                         '<br>=&gt; <a href="https://www.google.com/maps/dir/?api=1&destination='+ item.lat + ','+ item.lon +'" target="_blank" title="See in Google Maps">Get directions</a>');
+                         '<br>=&gt; <a href="https://www.google.com/maps/dir/?api=1&destination='+ item.lat + ','+ item.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>');
         marker.addTo(overlays.Pokestops);
     });
 }
