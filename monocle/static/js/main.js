@@ -75,7 +75,7 @@ var PokestopIcon = L.Icon.extend({
 var markers = {};
 var overlays = {
     SelteneIV: L.layerGroup([]),
-    Pokemon: L.layerGroup([]),
+    Pokemon: L.canvasLayer([]),
     Trash: L.layerGroup([]),
     Raids: L.layerGroup([]),
     Arenen: L.layerGroup([]),
