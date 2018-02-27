@@ -114,59 +114,71 @@ function getPopupContent (item) {
     var seconds = parseInt(diff - (minutes * 60));
     var gender = getGender(item.gender);
     var form = getForm(item.form);
-    var expires_at = minutes + 'm ' + seconds + 's';
     var expires_date = new Date(item.expires_at * 1000);
     var content = '<b>' + item.name + gender + form + '</b> - <a href="https://pokemongo.gamepress.gg/pokemon/' + item.pokemon_id + '">#' + item.pokemon_id + '</a>';
+    
+    let contentPartExpiresAt = `<i class="far fa-clock"></i> Verschwindet in: ${minutes}m ${seconds}s<br>`;
+    let contentPartExpiresAtTime = `<i class="far fa-clock"></i> Verschwindet um: ${expires_date.getHours() < 10 ? '0' : ''}${expires_date.getHours()}:${expires_date.getMinutes() < 10 ? '0' : ''}${expires_date.getMinutes()} Uhr<br>`;
+
     if(item.atk != undefined){
         var totaliv = 100 * (item.atk + item.def + item.sta) / 45;
-        content += ' - <b>' + totaliv.toFixed(2) + '%</b><br>';
-        content += 'Verschwindet in: ' + expires_at + '<br>';
-        content += 'Verschwindet um: ' + expires_date.getHours() + ':' + expires_date.getMinutes() + ' Uhr<br>';
-        content += 'Attacke 1: ' + item.move1 + ' ( ' + item.damage1 + ' dps )<br>';
-        content += 'Attacke 2: ' + item.move2 + ' ( ' + item.damage2 + ' dps )<br>';
+        content += ' - <b>' + Math.round(totaliv) + '%</b><br>';
+        content += contentPartExpiresAt;
+        content += contentPartExpiresAtTime;
         content += 'IV: ' + item.atk + ' Angr, ' + item.def + ' Vert, ' + item.sta + ' Kraf<br>';
         content += 'WP: ' + item.cp + ' | LVL: ' + item.level + '<br>';
+        content += 'Attacke 1: ' + item.move1 + ' ( ' + item.damage1 + ' dps )<br>';
+        content += 'Attacke 2: ' + item.move2 + ' ( ' + item.damage2 + ' dps )<br>';
     } else {
-        content += '<br>Verschwindet in: ' + expires_at + '<br>';
-        content += 'Verschwindet um: ' + expires_date.getHours() + ':' + expires_date.getMinutes() + ' Uhr<br>';
+        content += "<br>" + contentPartExpiresAt;
+        content += contentPartExpiresAtTime;
     }
 
     if (!hasRareIV(item)) {
-        content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Hidden" class="popup_filter_link">Ausblenden</a>';
+        content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Hidden" class="popup_filter_link"><i class="fas fa-eye-slash"></i> Ausblenden</a>';
         content += '&nbsp; | &nbsp;';
 
         var userPref = getPreference('filter-'+item.pokemon_id);
         if (userPref == 'trash'){
             content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Pokemon" class="popup_filter_link">Nach Pokemon</a>';
         }else{
-            content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Trash" class="popup_filter_link">Nach Trash</a>';
+            content += '<a href="#" data-pokeid="'+item.pokemon_id+'" data-newlayer="Trash" class="popup_filter_link"><i class="far fa-trash-alt"></i> Nach Trash</a>';
         }
     }
 
-
-    content += '<br>=&gt; <a href="https://www.google.com/maps/dir/?api=1&destination='+ item.lat + ','+ item.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
+    content += `<br><br><a href="https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lon}" target="_blank" title="Nach Google Maps"><i class="fas fa-location-arrow"></i> Navigieren</a>`;
     return content;
 }
 
-function getRaidPopupContent (raw) {
-	var content = '<b>Raid Level ' + raw.level + '</b><br>';
-	var info_link = (raw.pokemon_id === 0) ? '' : ' - <a href="https://pokemongo.gamepress.gg/pokemon/' + raw.pokemon_id + '">#' + raw.pokemon_id + '</a>';
-	content += 'Pokemon: ' + raw.pokemon_name + info_link + '<br>';
-	if (raw.pokemon_id === 0){
-		var diff = (raw.time_battle - new Date().getTime() / 1000);
-		var minutes = parseInt(diff / 60);
-    	var seconds = parseInt(diff - (minutes * 60));
-		content += 'Beginnt in: ' + minutes + 'm ' + seconds + 's<br>';
-	}else{
-    content += 'Attacke 1: ' + raw.move1 + '<br>';
-    content += 'Attacke 2: ' + raw.move2 + '<br>';
-		var diff = (raw.time_end - new Date().getTime() / 1000);
-		var minutes = parseInt(diff / 60);
-    	var seconds = parseInt(diff - (minutes * 60));
-		content += 'Endet in: ' + minutes + 'm ' + seconds + 's<br>';
+function getRaidPopupContent(raw) {
+    var content = `<div class="text-nowrap"><b>${raw.gym_name}</b><img src="static/monocle-icons/forts/${raw.team}.png" class="pull-right"></img><br>`;
+
+    for (var i = 0; i < raw.level; i++) {
+        content += '<i class="fas fa-star"></i>';
     }
-    if(raw.gym_name){content += '<br>Arena: ' + raw.gym_name;}
-    content += '<br>=&gt; <a href="https://www.google.com/maps/dir/?api=1&destination='+ raw.lat + ','+ raw.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
+    if (raw.pokemon_id === 0) {
+        var diff = (raw.time_battle - new Date().getTime() / 1000);
+        var minutes = parseInt(diff / 60);
+        var seconds = parseInt(diff - (minutes * 60));
+        content += `<br><i class="far fa-clock"></i> Schlüpft in: ${minutes}m ${seconds}s`;
+        let time_battle = new Date(raw.time_battle * 1000);
+        content += `<br><i class="far fa-clock"></i> Schlüpft um: ${time_battle.getHours() < 10 ? '0' : ''}${time_battle.getHours()}:${time_battle.getMinutes() < 10 ? '0' : ''}${time_battle.getMinutes()} Uhr<br>`;
+    } else {
+        let info_link = (raw.pokemon_id === 0) ? '' : ' - <a href="https://pokemongo.gamepress.gg/pokemon/' + raw.pokemon_id + '">#' + raw.pokemon_id + '</a>';
+        content += `<br><b>${raw.pokemon_name}</b>${info_link}`;
+        content += `<br>${raw.move1} | ${raw.move2}`;
+
+        var diff = (raw.time_end - new Date().getTime() / 1000);
+        var minutes = parseInt(diff / 60);
+        var seconds = parseInt(diff - (minutes * 60));
+        content += `<br><i class="far fa-clock"></i> Endet in: ${minutes}m ${seconds}s`;
+        let time_end = new Date(raw.time_end * 1000);
+        content += `<br><i class="far fa-clock"></i> Endet um: ${time_end.getHours() < 10 ? '0' : ''}${time_end.getHours()}:${time_end.getMinutes() < 10 ? '0' : ''}${time_end.getMinutes()} Uhr`;
+    }
+
+    content += `<br><a href="https://www.google.com/maps/dir/?api=1&destination=${raw.lat},${raw.lon}" target="_blank" title="Nach Google Maps"><i class="fas fa-location-arrow"></i> Navigieren</a>`;
+
+    content += "</div>";
     return content;
 }
 
@@ -264,31 +276,23 @@ function FortMarker (raw) {
     marker.raw = raw;
     markers[raw.id] = marker;
     marker.on('popupopen',function popupopen (event) {
-        var content = ''
-        if (raw.team === 0) {
-            content = '<b>Eine Leere Arena!</b>'
-        }
-        else {
-            if (raw.team === 1 ) {
-                content = '<b>Team Weisheit</b>'
-            }
-            else if (raw.team === 2 ) {
-                content = '<b>Team Wagemut</b>'
-            }
-            else if (raw.team === 3 ) {
-                content = '<b>Team Intuition</b>'
-            }
-            var last_modified = new Date(raw.last_modified * 1000);
+        var content = `<div class="text-nowrap"><b>${raw.gym_name}</b><br>`;
+        content += `<div class="gym-img-wrapper"><img src="${raw.img_url}" class="gym-img img-responsive"/><img src="static/monocle-icons/forts/${raw.team}.png" class="gym-team-img"></img></div>`;
 
-            content += '<br><span style="font-size: smaller">Letztes Update: ' + last_modified.toLocaleString() + '</span>' +
-                       '<br>Belegte Plätze: '+ (6 - raw.slots_available) + '/6' +
-                       '<br>Verteidiger: ' + raw.pokemon_name + ' (#' + raw.pokemon_id + ')';
+        let slots_available = 6 - raw.slots_available;
+        switch (raw.slots_available) {
+            case 0:
+            content += `<br>Keine freien Plätze`;
+            break;
+            case 1:
+            content += `<br><i class="fas fa-plus-circle"></i> ${raw.slots_available} freier Platz`;
+            break;
+            default:
+            content += `<br><i class="fas fa-plus-circle"></i> ${raw.slots_available} freie Plätze`;
+            break;
         }
-        if(raw.img_url){
-			content += '<br><img src="' + raw.img_url + '" class="gym-icon img-responsive"/>';
-		}
-        if(raw.gym_name){content += '<br>Arena: ' + raw.gym_name;}
-        content += '<br>=&gt; <a href="https://www.google.com/maps/dir/?api=1&destination='+ raw.lat + ','+ raw.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>';
+        content += `<br><span style="font-size: smaller">Letztes Update: ${new Date(raw.last_modified * 1000).toLocaleString()}</span>`;
+        content += `<br><a href="https://www.google.com/maps/dir/?api=1&destination=${raw.lat},${raw.lon}" target="_blank" title="Nach Google Maps"><i class="fas fa-location-arrow"></i> Navigieren</a>`;
         event.popup.setContent(content);
     });
     marker.bindPopup();
@@ -444,8 +448,9 @@ function addPokestopsToMap (data, map) {
         var icon = new PokestopIcon();
         var marker = L.marker([item.lat, item.lon], {icon: icon});
         marker.raw = item;
-        marker.bindPopup('<b>Pokestop: ' + item.external_id + '</b>' +
-                         '<br>=&gt; <a href="https://www.google.com/maps/dir/?api=1&destination='+ item.lat + ','+ item.lon +'" target="_blank" title="Nach Google Maps">Navigieren</a>');
+        marker.bindPopup(`<b>${item.name}</b>` +
+                         `<br><img src="${item.url}" class="gym-icon img-responsive"/>` +
+                         `<br><a href="https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lon}" target="_blank" title="Nach Google Maps"><i class="fas fa-location-arrow"></i> Navigieren</a>`);
         marker.addTo(overlays.Pokestops);
     });
 }
@@ -647,10 +652,16 @@ $("#settings_close_btn").on('click', function(){
 });
 
 $('.my-settings').on('click', function () {
-    // Settings button on bottom-left corner
-    $("#settings").show().animate({
-        opacity: 1
-    }, 250);
+     // Settings button on bottom-left corner
+    if($('#settings').css('display') === 'none') {
+        $("#settings").show().animate({
+            opacity: 1
+        }, 250);
+    } else {
+        $("#settings").animate({
+            opacity: 0
+        }, 250, function(){ $(this).hide(); });
+    }
 });
 
 $('#reset_btn').on('click', function () {
@@ -734,14 +745,15 @@ function populateSettingsPanels(){
     var container = $('.settings-panel[data-panel="filters"]').children('.panel-body');
     var newHtml = '';
     for (var i = 1; i <= _pokemon_count; i++){
-        var partHtml = '<div class="text-center">' +
-                         '<img src="static/monocle-icons/icons/'+i+'.png">' +
-                         '<div class="btn-group" role="group" data-group="filter-'+i+'">' +
-                           '<button type="button" class="btn btn-default" data-id="'+i+'" data-value="pokemon">Pokémon</button>' +
-                           '<button type="button" class="btn btn-default" data-id="'+i+'" data-value="trash">Trash</button>' +
-                           '<button type="button" class="btn btn-default" data-id="'+i+'" data-value="hidden">Ausblenden</button>' +
-                         '</div>' +
-                       '</div>';
+        var partHtml = `<div id="settings-filter-${i}" class="text-center">` +
+                         `<b>#${i < 100 ? '0' : ''}${i < 10 ? '0' : ''}${i}</b>` +
+                         `<img src="static/monocle-icons/icons/${i}.png" alt="#${i}">` +
+                         `<div class="btn-group" role="group" data-group="filter-${i}">` +
+                           `<button type="button" class="btn btn-default btn-sm" data-id="${i}" data-value="pokemon">Pokémon</button>` +
+                           `<button type="button" class="btn btn-default btn-sm" data-id="${i}" data-value="trash">Trash</button>` +
+                           `<button type="button" class="btn btn-default btn-sm" data-id="${i}" data-value="hidden">Ausblenden</button>` +
+                         `</div>` +
+                       `</div>`;
         newHtml += partHtml
     }
     container.html(newHtml);
