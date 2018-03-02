@@ -599,7 +599,12 @@ L.tileLayer(_MapProviderUrl, {
 var mypos = undefined;
 map.whenReady(function () {
     $('.my-location').on('click', function () {
-        map.locate({watch: true, enableHighAccurracy: true, setView: true})
+        if (mypos === undefined) {
+            map.locate({watch: true, enableHighAccurracy: true, setView: true})
+        } else {
+            mypos = undefined;
+            map.stoplocate()
+        }
         map.on('locationfound', (e) => {
             if (mypos !== undefined) {
                 map.removeLayer(mypos);
