@@ -602,7 +602,7 @@ map.whenReady(function () {
         if (mypos === undefined) {
             map.locate({watch: true, enableHighAccurracy: true, setView: true})
         } else {
-            map.stoplocate()
+            map.stoplocate();
             map.removeLayer(mypos);
             map.removeLayer(myrad);
         }
