@@ -116,7 +116,7 @@ function getPopupContent (item) {
     var form = getForm(item.form);
     var expires_date = new Date(item.expires_at * 1000);
     var content = '<b>' + item.name + gender + form + '</b> - <a href="https://pokemongo.gamepress.gg/pokemon/' + item.pokemon_id + '">#' + item.pokemon_id + '</a>';
-    
+
     let contentPartExpiresAt = `<i class="far fa-clock"></i> Verschwindet in: ${minutes}m ${seconds}s<br>`;
     let contentPartExpiresAtTime = `<i class="far fa-clock"></i> Verschwindet um: ${expires_date.getHours() < 10 ? '0' : ''}${expires_date.getHours()}:${expires_date.getMinutes() < 10 ? '0' : ''}${expires_date.getMinutes()} Uhr<br>`;
 
@@ -596,15 +596,12 @@ L.tileLayer(_MapProviderUrl, {
     attribution: _MapProviderAttribution
 }).addTo(map);
 
-var mypos = undefined;
+var mypos = L.circleMarker(e.latlng, {color: '#136AEC', fillColor: '#2A93EE',fillOpacity: 0.7, weight: 2,opacity: 0.9, radius: 4}).addTo(map);
+var radius = e.accuracy / 2;
 map.whenReady(function () {
     $('.my-location').on('click', function () {
-        map.locate({enableHighAccurracy: true, setView: true, maxZoom: 14})
+        map.locate({watch: true, enableHighAccurracy: true, setView: true})
         map.on('locationfound', (e) => {
-            if (mypos !== undefined) {
-                map.removeLayer(mypos);
-            }
-            mypos = L.marker(e.latlng).addTo(map);
             map.addLayer(mypos);
         });
     });
