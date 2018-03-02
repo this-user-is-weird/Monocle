@@ -601,7 +601,7 @@ map.whenReady(function () {
     $('.my-location').on('click', function () {
         map.locate({watch: true, enableHighAccurracy: true, setView: true})
       } else {
-        stoplocate()
+        map.stoplocate()
       }
         map.on('locationfound', (e) => {
             if (mypos !== undefined) {
