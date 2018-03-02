@@ -597,17 +597,24 @@ L.tileLayer(_MapProviderUrl, {
 }).addTo(map);
 
 var mypos = undefined;
+map.on('locationfound', (e) => {
+    if (mypos !== undefined) {
+        map.removeLayer(mypos);
+        map.removeLayer(myrad);
+    }
+    mypos = L.circleMarker(e.latlng, {color: '#136AEC', fillColor: '#2A93EE',fillOpacity: 0.7, weight: 2,opacity: 0.9, radius: 4}).addTo(map);
+    myrad = L.circle(e.latlng, e.accuracy/2, radius, {color: '#136AEC', fillColor: '#136AEC',fillOpacity: 0.05,  weight: 2, opacity: 0.5,radius: radius*2 }).addTo(map);
+    map.addLayer(mypos);
+    map.addLayer(myrad);
+});
 map.whenReady(function () {
     $('.my-location').on('click', function () {
-        map.locate({watch: true, enableHighAccurracy: true, setView: true})
-        map.on('locationfound', (e) => {
-            if (mypos !== undefined) {
-                map.removeLayer(mypos);
-            }
-            var radius = e.accuracy / 2;
-            mypos = L.circleMarker(e.latlng, {color: '#136AEC', fillColor: '#2A93EE',fillOpacity: 0.7, weight: 2,opacity: 0.9, radius: 4}).addTo(map);
-            map.addLayer(mypos);
-        });
+        if (mypos === undefined) {
+          map.locate({watch: true, enableHighAccurracy: true, setView: true})
+        } else {
+          mypos = undefined;
+          stoplocate()
+        }
     });
     overlays.Raids.once('add', function(e) {
         getRaids();
