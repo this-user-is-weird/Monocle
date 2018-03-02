@@ -604,6 +604,8 @@ map.whenReady(function () {
         } else {
             mypos = undefined;
             map.stoplocate()
+            map.removeLayer(mypos);
+            map.removeLayer(myrad);
         }
         map.on('locationfound', (e) => {
             if (mypos !== undefined) {
