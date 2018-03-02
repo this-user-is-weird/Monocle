@@ -596,12 +596,16 @@ L.tileLayer(_MapProviderUrl, {
     attribution: _MapProviderAttribution
 }).addTo(map);
 
-var mypos = L.circleMarker(e.latlng, {color: '#136AEC', fillColor: '#2A93EE',fillOpacity: 0.7, weight: 2,opacity: 0.9, radius: 4}).addTo(map);
-var radius = e.accuracy / 2;
+var mypos = undefined;
 map.whenReady(function () {
     $('.my-location').on('click', function () {
         map.locate({watch: true, enableHighAccurracy: true, setView: true})
         map.on('locationfound', (e) => {
+            if (mypos !== undefined) {
+                map.removeLayer(mypos);
+            }
+            var radius = e.accuracy / 2;
+            mypos = L.circleMarker(e.latlng, {color: '#136AEC', fillColor: '#2A93EE',fillOpacity: 0.7, weight: 2,opacity: 0.9, radius: 4}).addTo(map);
             map.addLayer(mypos);
         });
     });
