@@ -609,7 +609,6 @@ map.whenReady(function () {
                 var radius = e.accuracy / 2;
                 mypos = L.circleMarker(e.latlng, {color: '#136AEC', fillColor: '#2A93EE',fillOpacity: 0.7, weight: 2,opacity: 0.9, radius: 4}).addTo(map);
                 myrad = L.circle(e.latlng,radius , {color: '#136AEC', fillColor: '#136AEC',fillOpacity: 0.05,  weight: 2, opacity: 0.5,radius: radius*2 }).addTo(map);
-                map.addLayer(mypos);
             });
         } else {
             map.stoplocate();
