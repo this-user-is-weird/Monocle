@@ -604,7 +604,7 @@ map.whenReady(function () {
             map.on('locationfound', (e) => {
                 if (mypos !== undefined) {
                     map.removeLayer(mypos);
-                    map.removeLayer(myrad);*
+                    map.removeLayer(myrad);
                 }
                 var radius = e.accuracy / 2;
                 mypos = L.circleMarker(e.latlng, {color: '#136AEC', fillColor: '#2A93EE',fillOpacity: 0.7, weight: 2,opacity: 0.9, radius: 4}).addTo(map);
