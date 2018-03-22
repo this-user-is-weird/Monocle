@@ -143,22 +143,22 @@ SIMULTANEOUS_LOGINS = 4
 # Limit the number of workers simulating the app startup process simultaneously.
 SIMULTANEOUS_SIMULATION = 10
 
-+# Control login timing exactly set in LOGIN_SEC if LOGIN_SEC_CONTROL = True.
-+# Too many simultaneous logins from single IP address easily causes temp IP ban
-+# and results in "NOT AUTHENTICATED" error.
-+# Even you set SIMLTANEOUS_LOGINS = 1, temp IP ban will happen if you run multiple instances.
-+# If you set different LOGIN_SEC for each instances, you can avoid simultaneous logins from
-+# multiple instances.
-+# Example:
-+#   instance A: LOGIN_SEC = (1,11,21,31,41,51)
-+#   instance B: LOGIN_SEC = (4,14,24,34,44,54)
-+#   instance C: LOGIN_SEC = (7,17,27,37,47,57)
-+# Even single instance condition, default LOGIN_SEC is helpful to control login.
-+# It is recommended to set SIMULTANEOUS_LOGINS = 1 if you turn on LOGIN_SEC_CONTROL
-+# Default is False.
-+# Ignore this config, if you use many proxies and not have issue for simltaneouse login.
-+#LOGIN_SEC_CTRL = False
-+#LOGIN_SEC = tuple(range(1,60))
+# Control login timing exactly set in LOGIN_SEC if LOGIN_SEC_CONTROL = True.
+# Too many simultaneous logins from single IP address easily causes temp IP ban
+# and results in "NOT AUTHENTICATED" error.
+# Even you set SIMLTANEOUS_LOGINS = 1, temp IP ban will happen if you run multiple instances.
+# If you set different LOGIN_SEC for each instances, you can avoid simultaneous logins from
+# multiple instances.
+# Example:
+#   instance A: LOGIN_SEC = (1,11,21,31,41,51)
+#   instance B: LOGIN_SEC = (4,14,24,34,44,54)
+#   instance C: LOGIN_SEC = (7,17,27,37,47,57)
+# Even single instance condition, default LOGIN_SEC is helpful to control login.
+# It is recommended to set SIMULTANEOUS_LOGINS = 1 if you turn on LOGIN_SEC_CONTROL
+# Default is False.
+# Ignore this config, if you use many proxies and not have issue for simltaneouse login.
+#LOGIN_SEC_CTRL = False
+#LOGIN_SEC = tuple(range(1,60))
 
 # Immediately select workers whose speed are below (SPEED_UNIT)p/h instead of
 # continuing to try to find the worker with the lowest speed.
