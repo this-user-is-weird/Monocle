@@ -4,6 +4,7 @@ from s2sphere import CellId, LatLng
 from asyncio import gather, Lock, Semaphore, sleep, CancelledError
 from collections import deque
 from time import time, monotonic
+from datetime import datetime
 from queue import Empty, Full
 from itertools import cycle
 from sys import exit
@@ -86,8 +87,6 @@ class Worker:
     else:
         get_cell_ids = _pogeo_cell_ids
 
-    login_semaphore = Semaphore(conf.SIMULTANEOUS_LOGINS, loop=LOOP)
-    sim_semaphore = Semaphore(conf.SIMULTANEOUS_SIMULATION, loop=LOOP)
     update_account_lock = Lock(loop=LOOP)
 
     multiproxy = False
@@ -226,7 +225,9 @@ class Worker:
                 raise OverseerNotRunningException("During login attempt.")
             try:
                 self.error_code = '»'
-                async with self.login_semaphore:
+                await sleep(0.2, loop=LOOP)
+                async with self.overseer.login_semaphore:
+                    await self.login_sleep()
                     self.error_code = 'LOGIN'
                     await self.api.set_authentication(
                         username=self.username,
@@ -264,7 +265,7 @@ class Worker:
 
         self.error_code = '°'
         version = 9100
-        async with self.sim_semaphore:
+        async with self.overseer.sim_semaphore:
             self.error_code = 'APP SIMULATION'
             if conf.APP_SIMULATION:
                 await self.app_simulation_login(version)
@@ -273,6 +274,28 @@ class Worker:
 
         self.error_code = None
         return True
+
+    async def login_sleep(self):
+        if conf.LOGIN_SEC_CTRL:
+            self.error_code = 'Ω'
+            wait_sec = 0
+            login_sec = 0
+            now = datetime.now()
+            now_sec = now.second+now.microsecond/1000000
+            # In case now_sec(current time) is between last LOGIN_SEC and 60
+            if now_sec > conf.LOGIN_SEC[-1]:
+                login_sec = (60+conf.LOGIN_SEC[0])
+                wait_sec = login_sec - now_sec
+            else:
+                # Find target login time in LOGIN_SEC
+                for login_sec in conf.LOGIN_SEC:
+                    wait_sec = login_sec - now_sec
+                    if wait_sec >= 0.0:
+                        break
+            self.log.info('Target login sec for {} is {}(now:{:.3f}). Wait {:.3f} sec to login', self.username, login_sec, now_sec, wait_sec)
+            await sleep(wait_sec, loop=LOOP)
+            self.log.info('{} attempt to login at {}', self.username, datetime.now())
+        return
 
     async def get_player(self):
         request = self.api.create_request()

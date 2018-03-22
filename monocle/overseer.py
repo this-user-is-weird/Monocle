@@ -22,7 +22,7 @@ from .worker import Worker
 from .worker30 import Worker30, ENCOUNTER_CACHE
 from .worker_raider import WorkerRaider
 from .notification import Notifier
-from .weather import Weather 
+from .weather import Weather
 from .parks import Parks
 
 
@@ -82,6 +82,8 @@ class Overseer:
         self.log.info('Overseer initialized')
         self.status_log_at = 0
         self.pokemon_found = ''
+        self.login_semaphore = Semaphore(conf.SIMULTANEOUS_LOGINS, loop=LOOP)
+        self.sim_semaphore = Semaphore(conf.SIMULTANEOUS_SIMULATION, loop=LOOP)
 
     def start(self, status_bar):
         self.captcha_queue = self.manager.captcha_queue()
@@ -93,7 +95,7 @@ class Overseer:
 
         self.account_dict = get_accounts()
         self.add_accounts_to_queue(self.account_dict, self.captcha_queue, self.extra_queue)
-    
+
         for x in range(conf.GRID[0] * conf.GRID[1]):
             try:
                 self.workers.append(Worker(worker_no=x,
@@ -185,7 +187,7 @@ class Overseer:
             visits.append(w.visits)
             speeds.append(w.speed)
 
-        try: 
+        try:
             account_stats = Account.stats()
             account_reasons = ', '.join(['%s: %s' % (k,v) for k,v in account_stats[1].items()])
             account_refresh = datetime.fromtimestamp(account_stats[0]).strftime('%Y-%m-%d %H:%M:%S')
@@ -195,7 +197,7 @@ class Overseer:
             account30_test = account_stats[2].get('test30')
         except Exception as e:
             self.log.error("Unexpected error in overseer.update_stats: {}", e)
-            account_reasons = None 
+            account_reasons = None
             account_refresh = None
             account_clean = None
             account_test = None
@@ -240,13 +242,13 @@ class Overseer:
                 0, 0,
                 0, 0
             )
-            
+
         if Worker.has_raiders:
             smallest = nsmallest(1, WorkerRaider.job_queue.queue)
             if len(smallest) > 0:
                 oldest_gym_raided = int(time() - smallest[0][0]) if len(smallest) > 0 else 0
             else:
-                oldest_gym_raided = None 
+                oldest_gym_raided = None
             self.stats += 'Raider workers: {}, gyms: {}, queue: {}, oldest: {}s\n'.format(
                 len(WorkerRaider.workers), len(WorkerRaider.gyms),
                 WorkerRaider.job_queue.qsize(), oldest_gym_raided
@@ -314,7 +316,7 @@ class Overseer:
         T = completing the tutorial
         X = something bad happened
         C = CAPTCHA
-        G = scanning a Gym for details 
+        G = scanning a Gym for details
 
         Other letters: various errors and procedures
         """
@@ -610,7 +612,7 @@ class Overseer:
         with Parks() as parks:
             parks_thread = Thread(target=parks.reset_parks)
             parks_thread.start()
-        self.bootstrapping = False 
+        self.bootstrapping = False
 
     async def bootstrap_one(self):
         async def visit_release(worker, num, *args):

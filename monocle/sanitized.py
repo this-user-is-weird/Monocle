@@ -94,6 +94,8 @@ _valid_types = {
     'LOAD_CUSTOM_JS_FILE': bool,
     'LOGGED_FILES': Number,
     'LOGGED_SIZE': Number,
+    'LOGIN_SEC': set_sequence_range,
+    'LOGIN_SEC_CTRL': bool,
     'LOGIN_TIMEOUT': Number,
     'LV30_PERCENT_OF_WORKERS': Number,
     'LV30_ENCOUNTER_WAIT': Number,
@@ -191,7 +193,7 @@ _valid_types = {
     'WEBHOOKS': set_sequence,
     'WEATHER_STATUS': dict,
     'WEBHOOK_GYM_MAPPING': dict,
-    'WEBHOOK_RAID_MAPPING': dict, 
+    'WEBHOOK_RAID_MAPPING': dict,
 }
 
 _defaults = {
@@ -265,6 +267,8 @@ _defaults = {
     'LOAD_CUSTOM_JS_FILE': False,
     'LOGGED_FILES': 4,
     'LOGGED_SIZE': 500000,
+    'LOGIN_SEC' : tuple(range(1,60)),
+    'LOGIN_SEC_CTRL' : False,
     'LOGIN_TIMEOUT': 2.5,
     'LV30_PERCENT_OF_WORKERS': 0.0,
     'LV30_ENCOUNTER_WAIT': 0.0,
