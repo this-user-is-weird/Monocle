@@ -1,3 +1,5 @@
+#THIS PROJECT IS RETIRED. NO FURTHER DEVELOPMENT!
+
 # Monocle/Monkey
 
 Read [wiki](https://github.com/Hydro74000/Monocle/wiki) first before looking for help on Discord at `PMSF#monkey-hydro`.
